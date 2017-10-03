@@ -1,0 +1,20 @@
+{
+    "name": "megaads-vn/anti-crawl",
+    "description": "Anti crawl module",
+    "keywords": ["megaads-vn", "anti-crawl"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "megaads",
+            "homepage": "http://megaads.vn"
+        }
+    ],
+    "require": {
+        "php": ">=5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "AntiCrawl\\": "src"
+        }
+    }
+}
