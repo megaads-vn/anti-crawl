@@ -12,4 +12,15 @@ composer require megaads-vn/anti-crawl
 	"megaads-vn/anti-crawl":"dev-master"
 }
 ```
-
+config for yii1
+```javascript
+    'components' => array(
+        "antiCrawl"=>array(
+            "class" => "application.vendor.megaads-vn.anti-crawl.src.RequestLimits",
+        )
+    )
+```
+use for yii1
+```javascript
+$isOk = Yii::app()->antiCrawl->check();
+```
