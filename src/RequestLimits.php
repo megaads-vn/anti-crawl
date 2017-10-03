@@ -1,10 +1,5 @@
 <?php
-
-namespace AntiCrawl;
-
 require_once 'RedisConnection.php';
-
-use AntiCrawl\RedisConnection;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -37,7 +32,7 @@ class RequestLimits extends RedisConnection {
     }
 
     public function getUserAgent() {
-        $this->userAgent = isset($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:null;
+        $this->userAgent = isset($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';
         return $this->userAgent;
     }
 
@@ -58,22 +53,23 @@ class RequestLimits extends RedisConnection {
     }
 
     public function getRefer() {
-        $this->refer = isset($_SERVER["HTTP_REFERER"])?$_SERVER["HTTP_REFERER"]:null;
+        $this->refer = isset($_SERVER["HTTP_REFERER"])?$_SERVER["HTTP_REFERER"]:'';
         return $this->refer;
     }
 
     public function check() {
         $retVal = false;
         $size = $this->getClient()->lLen($this->getIp());
-        $this->getClient()->lPush($this->getIp(), strtotime("now"));
         if ($this->isCheckRefer) {
             $this->getRefer();
             $this->getUserAgent();
             if (empty($this->refer) || empty($this->userAgent)) {
                 $this->getClient()->lPush("block:" . $this->getIp(), "emptyRefer:" . strtotime("now") . ":" . date("Y-m-d h:i:s"));
-                $retVal = false;
+                return false;
             }
-        }else if ($size == 0) {
+        }
+        $this->getClient()->lPush($this->getIp(), strtotime("now"));
+        if ($size == 0) {
             $this->getClient()->setTimeout($this->getIp(), $this->limitTime);
             $retVal = true;
         } else if ($size > $this->maxRequest) {

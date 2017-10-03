@@ -1,7 +1,4 @@
 <?php
-namespace AntiCrawl;
-
-use Redis;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -75,7 +72,7 @@ class RedisConnection {
      */
     public function getClient($reconnect = false) {
         if ($this->_client === null || $reconnect) {
-            $this->_client = new Redis;
+            $this->_client = new Redis();
             $this->_client->connect($this->hostname, $this->port, $this->timeout);
             if (isset($this->password)) {
                 if ($this->_client->auth($this->password) === false) {
@@ -178,7 +175,7 @@ class RedisConnection {
      * @return mixed the response from the redis client
      */
     public function __call($name, $parameters) {
-        return call_user_func_array(array($this->getClient(), $name), $parameters);
+//        return call_user_func_array(array($this->getClient(), $name), $parameters);
     }
 
 }
