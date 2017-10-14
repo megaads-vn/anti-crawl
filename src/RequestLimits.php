@@ -18,7 +18,7 @@ class RequestLimits extends RedisConnection {
     private $userAgent;
     private $refer;
     private $maxRequest = 25;
-    private $limitTime = 5 * 60; // second
+    private $limitTime = 300; // 5*60 second
     private $safeTime = 2; // second
     private $isCheckRefer = true;
 
