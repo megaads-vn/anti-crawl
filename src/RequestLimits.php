@@ -59,6 +59,14 @@ class RequestLimits extends RedisConnection {
 
     public function check() {
         $retVal = false;
+        $oldTimes = $this->getClient()->lrange($this->getIp(),0,-1);
+        if (!empty($oldTimes)) {
+            foreach ($oldTimes as $time) {
+                if (strtotime("now") - $time >= 5) {
+                    $this->getClient()->lRemove($this->getIp(),$time,0);
+                }
+            }
+        }
         $size = $this->getClient()->lLen($this->getIp());
         if ($this->isCheckRefer) {
             $this->getRefer();
